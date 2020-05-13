@@ -63,6 +63,9 @@ namespace MicroElements.Metadata
         public IReadOnlyList<IPropertyValue> Properties => _propertyContainer.Properties;
 
         /// <inheritdoc />
+        public SearchOptions SearchOptions => _propertyContainer.SearchOptions;
+
+        /// <inheritdoc />
         public T GetValue<T>(IProperty<T> property, bool searchInParent = true) => _propertyContainer.GetValue(property, searchInParent);
 
         /// <inheritdoc />

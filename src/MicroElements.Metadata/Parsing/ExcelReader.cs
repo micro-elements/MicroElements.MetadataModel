@@ -222,6 +222,71 @@ namespace MicroElements.Parsing
             return rowValues;
         }
 
+        /// <summary>
+        /// Cell value with extended info.
+        /// </summary>
+        public class CellValue
+        {
+            public static readonly CellValue Empty = new CellValue(null, null, null, null);
+
+            public string Text { get; }
+
+            public string ColumnName { get; }
+
+            public string CellReference { get; }
+
+            public IPropertyParser Parser { get; }
+
+            public CellValue(string text, string columnName, string cellReference, IPropertyParser parser)
+            {
+                Text = text;
+                ColumnName = columnName;
+                CellReference = cellReference;
+                Parser = parser;
+            }
+        }
+
+        public static CellValue[] GetRowValuesExt(
+            this ExcelElement<Row> row,
+            ExcelElement<Column>[] headers,
+            IParserProvider parserProvider,
+            string nullValue = null)
+        {
+            if (row.IsEmpty())
+                return Array.Empty<CellValue>();
+
+            var cells = row.GetRowCells();
+
+            CellValue[] rowValues = new CellValue[headers.Length];
+            for (int i = 0; i < headers.Length; i++)
+            {
+                var header = headers[i];
+
+                // Find cell for the same column.
+                var cell = cells.FirstOrDefault(c => c.Data.CellReference.GetColumnReference() == header.Data.ColumnReference);
+
+                if (cell != null)
+                {
+                    // Set propertyParser for cell according column name
+                    var propertyParser = parserProvider.GetParsers().FirstOrDefault(parser => parser.SourceName == header.Data.Name);
+                    if (propertyParser != null)
+                    {
+                        cell.SetMetadata(propertyParser);
+                    }
+
+                    var cellValue = cell.GetCellValue(nullValue);
+                    string cellReference = cell.Data.CellReference.Value;
+                    rowValues[i] = new CellValue(cellValue, header.Data.Name, cellReference, propertyParser);
+                }
+                else
+                {
+                    rowValues[i] = CellValue.Empty;
+                }
+            }
+
+            return rowValues;
+        }
+
         private static WorkbookPart GetWorkbookPartFromCell(Cell cell)
         {
             Worksheet workSheet = cell.Ancestors<Worksheet>().FirstOrDefault();

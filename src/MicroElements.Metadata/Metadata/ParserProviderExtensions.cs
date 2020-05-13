@@ -51,5 +51,16 @@ namespace MicroElements.Metadata
                 .Parse(textValue)
                 .Map(value => (IPropertyValue)new PropertyValue<T>(propertyParser.TargetProperty, value, ValueSource.Defined));
         }
+
+        public static Result<IPropertyValue, Message> ParseExt<T>(IPropertyParser propertyParserUntyped, string textValue, ValueSource valueSource)
+        {
+            var propertyParser = (IPropertyParser<T>)propertyParserUntyped;
+
+            IValueParserExt<T> valueParser = (IValueParserExt<T>)propertyParser.ValueParser;
+
+            return valueParser
+                .Parse(textValue, valueSource)
+                .Map(value => (IPropertyValue)new PropertyValue<T>(propertyParser.TargetProperty, value, valueSource));
+        }
     }
 }

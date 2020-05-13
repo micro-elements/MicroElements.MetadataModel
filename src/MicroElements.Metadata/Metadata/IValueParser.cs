@@ -34,6 +34,25 @@ namespace MicroElements.Metadata
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IValueParserExt<T> : IValueParser
+    {
+        /// <summary>
+        /// Parses string value to target type.
+        /// Returns Error if value can not be parsed.
+        /// </summary>
+        /// <param name="value">Source value.</param>
+        /// <param name="valueSource">Value source.</param>
+        /// <returns>Parse result.</returns>
+        Result<T, Message> Parse(string value, ValueSource valueSource);
+
+        //IPropertyValue
+        Result<IPropertyValue<T>, Message> Parse2(IProperty property, string value, ValueSource valueSource);
+    }
+
+    /// <summary>
     /// Value parser base class.
     /// </summary>
     /// <typeparam name="T">Value type.</typeparam>

@@ -21,6 +21,11 @@ namespace MicroElements.Metadata
         IReadOnlyList<IPropertyValue> Properties { get; }
 
         /// <summary>
+        /// Gets the property container search options.
+        /// </summary>
+        SearchOptions SearchOptions { get; }
+
+        /// <summary>
         /// Gets the value for property.
         /// </summary>
         /// <typeparam name="T">Property type.</typeparam>

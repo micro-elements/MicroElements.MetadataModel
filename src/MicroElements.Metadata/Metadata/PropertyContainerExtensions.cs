@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using MicroElements.Functional;
 
@@ -193,9 +192,10 @@ namespace MicroElements.Metadata
         /// </summary>
         /// <param name="propertyContainer">Property container.</param>
         /// <param name="property">Property to search.</param>
-        /// <param name="search">Search conditions.</param>
         /// <returns>True if property exists in container.</returns>
-        public static bool HasValue(this IPropertyContainer propertyContainer, IProperty property, SearchOptions search) =>
-            propertyContainer.GetPropertyValueUntyped(property, search).HasValue();
+        public static bool HasValue(this IPropertyContainer propertyContainer, IProperty property) =>
+            propertyContainer
+                .GetPropertyValueUntyped(property, propertyContainer.SearchOptions)
+                .HasValue();
     }
 }

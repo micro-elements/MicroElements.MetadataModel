@@ -43,6 +43,9 @@ namespace MicroElements.Metadata
         public IReadOnlyList<IPropertyValue> Properties => _propertyValues;
 
         /// <inheritdoc />
+        public SearchOptions SearchOptions => _searchOptions;
+
+        /// <inheritdoc />
         public object GetValueUntyped(IProperty property, bool searchInParent = true)
         {
             IPropertyValue propertyValue = this.GetPropertyValueUntyped(property, _searchOptions
